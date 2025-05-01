@@ -3,40 +3,54 @@ import puppeteer from "puppeteer";
 
 const baseURL = "https://www.youtube.com/watch?v=";
 const videoID = "iYFExyAsEYs";
-const time = 2;
+const time = 20;
 const videoURL = `${baseURL}${videoID}&t=${time}`;
 
-const browseTest = async () => {
-  // Launch the browser and open a new blank page
-  const browser = await puppeteer.launch();
+const browseYouTube = async () => {
+  // ヘッドレスモードを無効化してブラウザを表示
+  const browser = await puppeteer.launch({
+    headless: false,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
-
-  // Navigate the page to a URL.
-  await page.goto(videoURL);
-
-  // Set screen size.
   await page.setViewport({ width: 1280, height: 720 });
 
-  page.screenshot({
-    path: "./screenshots/screenshot.png",
-  });
+  // YouTubeの動画ページに移動
+  await page.goto(videoURL);
 
-  // Type into search box.
-  //   await page.locator(".devsite-search-field").fill("automate beyond recorder");
+  await page.screenshot({ path: "./screenshots/screenshot0.png" });
+  console.log("Screenshot taken");
 
-  // Wait and click on first result.
-  //   await page.locator(".devsite-result-item-link").click();
+  // 動画の再生ボタンをクリック
+  const playButtonSelector = ".ytp-large-play-button";
+  await page.waitForSelector(playButtonSelector);
+  await page.click(playButtonSelector);
+  console.log("Video started");
 
-  // Locate the full title with a unique string.
-  //   const textSelector = await page
-  //     .locator("text/Customize and automate")
-  //     .waitHandle();
-  //   const fullTitle = await textSelector?.evaluate((el) => el.textContent);
+  // フルスクリーンボタンをクリック
+  const fullScreenButtonSelector = ".ytp-fullscreen-button";
+  await page.click(fullScreenButtonSelector);
+  console.log("Fullscreen activated");
 
-  // Print the full title.
-  //   console.log('The title of this blog post is "%s".', fullTitle);
+  await page.screenshot({ path: "./screenshots/screenshot1.png" });
+  console.log("Screenshot taken");
 
+  await page.screenshot({ path: "./screenshots/screenshot2.png" });
+  console.log("Screenshot taken");
+
+  // 動画を一時停止
+  const pauseButtonSelector = ".ytp-play-button";
+  await page.click(pauseButtonSelector);
+  console.log("Video paused");
+
+  // スクリーンショットを撮影
+  await page.screenshot({ path: "./screenshots/screenshot3.png" });
+  console.log("Screenshot taken");
+
+  // ブラウザを閉じる
   await browser.close();
 };
 
-browseTest();
+browseYouTube().catch((error) => {
+  console.error("Error occurred:", error);
+});

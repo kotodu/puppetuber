@@ -14,3 +14,19 @@
 # 開発記録
 
 - typescipt と puppeter はインストールした
+
+# (参考)動画について
+
+- https://qiita.com/miyawa-tarou/items/511ec3ea44daef8e7338
+- Chromium ではうまくいかない場合がある
+  - 今回はそうではない模様
+
+# YouTube 仕様の確認
+
+- ヘッドレスモードの無効化
+  - `headless:false`
+- Bot 検出回避
+
+```
+args: ["--no-sandbox", "--disable-setuid-sandbox"],
+```
