@@ -30,3 +30,7 @@
 ```
 args: ["--no-sandbox", "--disable-setuid-sandbox"],
 ```
+
+# 残念なお知らせ
+
+![sad.png](sad.png)
